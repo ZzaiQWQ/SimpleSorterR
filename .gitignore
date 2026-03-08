@@ -1,0 +1,23 @@
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build.properties
+
+# Logs
+logs/
+*.log
+
+# IDE/Editor specific
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+.vscode/
+
+# Fabric
+run/
+
+# OS specific
+.DS_Store
+Thumbs.db
