@@ -105,7 +105,7 @@ Also accessible from **Mod Menu** if installed.
 - **Client-Side Only** — No server modifications; sorting is achieved by simulating player click actions
 - **Multi-Version Architecture** — Built with a `core` + `shared` + `platform` layered architecture, allowing one codebase to support multiple Minecraft versions
 - **Modular Mouse Tweaks** — Each mouse enhancement is an independent `MouseTweakModule`, making it easy to add or modify features
-- **License** — CC0-1.0
+- **License** — All Rights Reserved (See LICENSE file for strict usage terms)
 
 ---
 
