@@ -1,6 +1,6 @@
 ![SimpleSorter Banner](assets/banner.png)
 
-# SimpleSorter (极简智能排序)
+# SimpleSorter (简单R键整理)
 
 > 一款轻量级 Minecraft Fabric 客户端模组，为你的背包管理带来丝滑体验。
 
@@ -114,4 +114,5 @@
   <b>告别杂乱背包，享受整洁生存。</b><br>
   <i>SimpleSorter — 你的 Minecraft 收纳大师。</i>
 </p>
+
 
