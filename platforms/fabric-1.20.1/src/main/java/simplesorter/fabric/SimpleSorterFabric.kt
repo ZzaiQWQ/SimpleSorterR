@@ -3,6 +3,7 @@ package simplesorter.fabric
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import org.slf4j.LoggerFactory
+import simplesorter.mc.AutoReplacer
 import simplesorter.mc.InventoryScanner
 
 class SimpleSorterFabric : ClientModInitializer {
@@ -31,6 +32,7 @@ class SimpleSorterFabric : ClientModInitializer {
             
             if (client.player != null) {
                 InventoryScanner.tickSort()
+                AutoReplacer.tick()
             }
         }
     }

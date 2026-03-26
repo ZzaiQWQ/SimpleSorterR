@@ -41,15 +41,15 @@ public class HandledScreenMixin {
                 return;
             }
         }
+
     }
+
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void onMouseClicked(net.minecraft.client.gui.Click click, boolean bl, CallbackInfoReturnable<Boolean> cir) {
-        System.out.println("[SimpleSorter] mouseClicked called with click: " + click);
         HandledScreen<?> screen = (HandledScreen<?>) (Object) this;
         net.minecraft.screen.slot.Slot slot = ((simplesorter.fabric.mixin.HandledScreenAccessor) screen)
                 .invokeGetSlotAt(click.x(), click.y());
-        System.out.println("[SimpleSorter] mouseClicked slot: " + slot);
         boolean isShift = GLFW.glfwGetKey(net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle(),
                 GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS
                 || GLFW.glfwGetKey(net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle(),
@@ -57,7 +57,6 @@ public class HandledScreenMixin {
         boolean cancel = simplesorter.mc.MouseTweaksHandler.INSTANCE.onMouseClicked(screen, slot, click.button(),
                 isShift);
         if (cancel) {
-            System.out.println("[SimpleSorter] mouseClicked canceled by tweak!");
             cir.setReturnValue(true);
         }
     }
@@ -78,5 +77,23 @@ public class HandledScreenMixin {
     @Inject(method = "mouseReleased", at = @At("HEAD"))
     private void onMouseReleased(net.minecraft.client.gui.Click click, CallbackInfoReturnable<Boolean> cir) {
         simplesorter.mc.MouseTweaksHandler.INSTANCE.onMouseReleased(click.button());
+    }
+
+    @Inject(method = "drawSlot", at = @At("RETURN"))
+    private void onDrawSlot(net.minecraft.client.gui.DrawContext context, net.minecraft.screen.slot.Slot slot, int x, int y, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+        net.minecraft.client.MinecraftClient client = net.minecraft.client.MinecraftClient.getInstance();
+        if (client.player == null) return;
+        
+        boolean isLocked = false;
+        if (slot.inventory == client.player.getInventory()) {
+            isLocked = simplesorter.mc.LockManager.INSTANCE.getPlayerLockedSlots().contains(slot.getIndex());
+        } else {
+            isLocked = simplesorter.mc.LockManager.INSTANCE.getContainerLockedSlots(client.player.currentScreenHandler.syncId).contains(slot.id);
+        }
+        
+        if (isLocked) {
+            // Draw a semi-transparent red overlay to explicitly indicate the slot is locked
+            context.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x60FF0000);
+        }
     }
 }

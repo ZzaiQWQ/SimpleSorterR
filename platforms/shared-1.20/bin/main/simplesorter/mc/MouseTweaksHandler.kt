@@ -5,6 +5,8 @@ import net.minecraft.screen.slot.Slot
 import simplesorter.mc.tweak.LmbShiftDragTweak
 import simplesorter.mc.tweak.LmbShiftDoubleClickTweak
 import simplesorter.mc.tweak.LmbSpaceDoubleClickTweak
+import simplesorter.mc.tweak.QDoubleClickDropTweak
+import simplesorter.mc.tweak.AltClickLockTweak
 import simplesorter.mc.tweak.MouseTweakModule
 
 /**
@@ -16,7 +18,9 @@ object MouseTweaksHandler {
     private val tweaks: List<MouseTweakModule> = listOf(
         LmbShiftDragTweak(),
         LmbShiftDoubleClickTweak(),
-        LmbSpaceDoubleClickTweak()
+        LmbSpaceDoubleClickTweak(),
+        QDoubleClickDropTweak(),
+        AltClickLockTweak()
     )
 
     @JvmStatic

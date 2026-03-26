@@ -14,6 +14,15 @@ object SimpleSorterConfig {
     
     var requireZForConfig: Boolean = true
 
+    // Auto-replace settings
+    var autoReplaceSameItem: Boolean = true
+    var autoReplaceSameType: Boolean = true
+    var autoRefillStack: Boolean = true
+    var refillThreshold: Int = 20
+
+    // Persisted specific-profile locked slots
+    var worldLockedSlots: MutableMap<String, MutableSet<Int>> = mutableMapOf()
+
     var categoryOrder: MutableList<String> = mutableListOf(
         "minecraft:tools_and_utilities",
         "minecraft:combat",
@@ -40,6 +49,21 @@ object SimpleSorterConfig {
             val json = GSON.fromJson(jsonStr, JsonObject::class.java)
 
             if (json.has("requireZForConfig")) requireZForConfig = json.get("requireZForConfig").asBoolean
+            if (json.has("autoReplaceSameItem")) autoReplaceSameItem = json.get("autoReplaceSameItem").asBoolean
+            if (json.has("autoReplaceSameType")) autoReplaceSameType = json.get("autoReplaceSameType").asBoolean
+            if (json.has("autoRefillStack")) autoRefillStack = json.get("autoRefillStack").asBoolean
+            if (json.has("refillThreshold")) refillThreshold = json.get("refillThreshold").asInt
+            
+            if (json.has("worldLockedSlots")) {
+                val mapObj = json.getAsJsonObject("worldLockedSlots")
+                for (entry in mapObj.entrySet()) {
+                    val list = mutableSetOf<Int>()
+                    for (e in entry.value.asJsonArray) {
+                        list.add(e.asInt)
+                    }
+                    worldLockedSlots[entry.key] = list
+                }
+            }
             
             if (json.has("categoryOrder")) {
                 val array = json.getAsJsonArray("categoryOrder")
@@ -60,6 +84,18 @@ object SimpleSorterConfig {
         try {
             val json = JsonObject()
             json.addProperty("requireZForConfig", requireZForConfig)
+            json.addProperty("autoReplaceSameItem", autoReplaceSameItem)
+            json.addProperty("autoReplaceSameType", autoReplaceSameType)
+            json.addProperty("autoRefillStack", autoRefillStack)
+            json.addProperty("refillThreshold", refillThreshold)
+
+            val lockedMapObj = JsonObject()
+            for ((k, v) in worldLockedSlots) {
+                val arr = com.google.gson.JsonArray()
+                for (slotIndex in v) arr.add(slotIndex)
+                lockedMapObj.add(k, arr)
+            }
+            json.add("worldLockedSlots", lockedMapObj)
 
             val array = com.google.gson.JsonArray()
             for (cat in categoryOrder) array.add(cat)

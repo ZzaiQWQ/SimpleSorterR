@@ -1,6 +1,25 @@
 {
+    "key.categories.simplesorter": "SimpleSorter",
     "key.simplesorter.sort": "Sort Inventory",
     "key.simplesorter.config": "Open Settings",
-    "category.simplesorter.keybindings": "SimpleSorter",
-    "key.categories.inventory": "Inventory"
+    "key.simplesorter.lock": "Lock Slot",
+    "key.simplesorter.batchdrop": "Batch Drop",
+
+    "config.simplesorter.title": "SimpleSorter Settings",
+    "config.simplesorter.category.general": "General",
+    "config.simplesorter.category.autoReplace": "Auto Replace",
+
+    "config.simplesorter.requireZ": "Require holding Z to open settings",
+    "config.simplesorter.requireZ.tooltip": "When enabled, you must hold Z while pressing the settings key to open this menu.",
+    "config.simplesorter.categoryOrder": "Category Sort Order",
+    "config.simplesorter.categoryOrder.tooltip": "Categories listed first have higher sorting priority. You can add custom Item Group IDs.",
+
+    "config.simplesorter.replaceSameItem": "Replace broken tool with same item",
+    "config.simplesorter.replaceSameItem.tooltip": "When your held tool breaks, auto-replace it with the same item from inventory.",
+    "config.simplesorter.replaceSameType": "Replace broken tool with same type",
+    "config.simplesorter.replaceSameType.tooltip": "If no exact match found, replace with same tool type (e.g. iron pickaxe → diamond pickaxe).",
+    "config.simplesorter.autoRefill": "Auto-refill stackable items",
+    "config.simplesorter.autoRefill.tooltip": "When held stackable item count drops below threshold, auto-refill from inventory.",
+    "config.simplesorter.refillThreshold": "Refill Threshold",
+    "config.simplesorter.refillThreshold.tooltip": "Refill when 64-stack items drop below this count. 16-stack items auto-use half (8)."
 }

@@ -8,11 +8,13 @@ import org.lwjgl.glfw.GLFW
 object SimpleSorterKeybindings {
     lateinit var sortKey: KeyBinding
     lateinit var configKey: KeyBinding
+    lateinit var lockKey: KeyBinding
+    lateinit var batchDropKey: KeyBinding
 
     fun register() {
         sortKey = KeyBindingHelper.registerKeyBinding(
             KeyBinding(
-                "key.simplesorter.sort", // Translation key
+                "key.simplesorter.sort",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_R,
                 KeyBinding.Category.INVENTORY
@@ -21,11 +23,32 @@ object SimpleSorterKeybindings {
 
         configKey = KeyBindingHelper.registerKeyBinding(
             KeyBinding(
-                "key.simplesorter.config", // Translation key
+                "key.simplesorter.config",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_I,
                 KeyBinding.Category.INVENTORY
             )
         )
+
+        lockKey = KeyBindingHelper.registerKeyBinding(
+            KeyBinding(
+                "key.simplesorter.lock",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_LEFT_ALT,
+                KeyBinding.Category.INVENTORY
+            )
+        )
+
+        batchDropKey = KeyBindingHelper.registerKeyBinding(
+            KeyBinding(
+                "key.simplesorter.batchdrop",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_CAPS_LOCK,
+                KeyBinding.Category.INVENTORY
+            )
+        )
+
+        simplesorter.mc.KeyBindingHolder.lockKey = lockKey
+        simplesorter.mc.KeyBindingHolder.batchDropKey = batchDropKey
     }
 }

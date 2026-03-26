@@ -1,0 +1,13 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "simplesorter.fabric.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "client": [
+        "HandledScreenMixin",
+        "HandledScreenAccessor"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

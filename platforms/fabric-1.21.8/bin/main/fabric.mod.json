@@ -1,0 +1,32 @@
+{
+    "schemaVersion": 1,
+    "id": "simplesorter",
+    "version": "${version}",
+    "name": "SimpleSorter",
+    "description": "Minimal client-side R-key inventory sorting",
+    "authors": [
+        "Zzai"
+    ],
+    "contact": {
+        "homepage": "https://github.com/ZzaiQWQ/SimpleSorterS"
+    },
+    "license": "ARR",
+    "icon": "assets/simplesorter/icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "client": [
+            "simplesorter.fabric.SimpleSorterFabric"
+        ],
+        "modmenu": [
+            "simplesorter.mc.config.ModMenuIntegration"
+        ]
+    },
+    "mixins": [
+        "simplesorter.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.16.5",
+        "minecraft": ">=1.21.8",
+        "fabric-api": "*"
+    }
+}

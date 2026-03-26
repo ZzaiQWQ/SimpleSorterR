@@ -3,6 +3,10 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build.properties
 
+# Compiled output
+out/
+classes/
+
 # Logs
 logs/
 *.log
@@ -12,12 +16,16 @@ logs/
 *.iws
 *.iml
 *.ipr
-out/
 .vscode/
 
 # Fabric
-run/
+**/run/
 
 # OS specific
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Misc
+local.properties
+cloth-maven.xml

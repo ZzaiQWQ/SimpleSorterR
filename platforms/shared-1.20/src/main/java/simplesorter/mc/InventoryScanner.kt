@@ -103,9 +103,12 @@ object InventoryScanner {
 
     private fun scanPlayerInventory(handler: net.minecraft.screen.ScreenHandler, player: net.minecraft.entity.player.PlayerEntity): List<SlotSnapshot> {
         val snapshots = mutableListOf<SlotSnapshot>()
+        val locked = LockManager.getPlayerLockedSlots()
         for (slot in handler.slots) {
             if (slot.inventory == player.inventory && slot.index in 9..35) {
-                snapshots.add(makeSnapshot(slot))
+                if (!locked.contains(slot.index)) {
+                    snapshots.add(makeSnapshot(slot))
+                }
             }
         }
         return snapshots
@@ -113,9 +116,12 @@ object InventoryScanner {
 
     private fun scanContainerSlots(handler: net.minecraft.screen.ScreenHandler, player: net.minecraft.entity.player.PlayerEntity): List<SlotSnapshot> {
         val snapshots = mutableListOf<SlotSnapshot>()
+        val locked = LockManager.getContainerLockedSlots(handler.syncId)
         for (slot in handler.slots) {
             if (slot.inventory != player.inventory) {
-                snapshots.add(makeSnapshot(slot))
+                if (!locked.contains(slot.id)) {
+                    snapshots.add(makeSnapshot(slot))
+                }
             }
         }
         return snapshots
