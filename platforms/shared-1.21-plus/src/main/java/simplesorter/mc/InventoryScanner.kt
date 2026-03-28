@@ -4,7 +4,9 @@ import simplesorter.sort.SlotSnapshot
 import simplesorter.sort.Sorter
 import net.minecraft.client.MinecraftClient
 import net.minecraft.registry.Registries
+import net.minecraft.screen.GenericContainerScreenHandler
 import net.minecraft.screen.PlayerScreenHandler
+import net.minecraft.screen.ShulkerBoxScreenHandler
 import net.minecraft.screen.slot.SlotActionType
 import org.slf4j.LoggerFactory
 
@@ -72,10 +74,14 @@ object InventoryScanner {
         }
 
         // Scan and sort
+        // 只对存储型容器排序（箱子/木桶/末影箱/潜影盒），跳过熔炉/工作台/漏斗等
         val slotsToSort = if (handler is PlayerScreenHandler) {
             scanPlayerInventory(handler, player)
-        } else {
+        } else if (handler is GenericContainerScreenHandler || handler is ShulkerBoxScreenHandler) {
             scanContainerSlots(handler, player)
+        } else {
+            sorting = false
+            return
         }
 
         if (slotsToSort.isEmpty() || slotsToSort.all { it.itemId == "minecraft:air" }) {
