@@ -30,20 +30,24 @@ object ConfigScreen {
         )
         
         general.addEntry(
-            entryBuilder.startStrList(Text.translatable("config.simplesorter.categoryOrder"), SimpleSorterConfig.categoryOrder)
+            entryBuilder.startStrList(Text.translatable("config.simplesorter.tabOrder"), SimpleSorterConfig.tabOrder)
                 .setDefaultValue(mutableListOf(
-                    "minecraft:tools_and_utilities",
-                    "minecraft:combat",
                     "minecraft:building_blocks",
+                    "minecraft:colored_blocks",
                     "minecraft:natural_blocks",
                     "minecraft:functional_blocks",
                     "minecraft:redstone_blocks",
+                    "minecraft:tools_and_utilities",
+                    "minecraft:combat",
                     "minecraft:food_and_drinks",
                     "minecraft:ingredients",
                     "minecraft:spawn_eggs"
                 ))
-                .setTooltip(Text.translatable("config.simplesorter.categoryOrder.tooltip"))
-                .setSaveConsumer { list: List<String> -> SimpleSorterConfig.categoryOrder = list.toMutableList() }
+                .setTooltip(Text.translatable("config.simplesorter.tabOrder.tooltip"))
+                .setSaveConsumer { list: List<String> ->
+                    SimpleSorterConfig.tabOrder = list.toMutableList()
+                    simplesorter.mc.CreativeTabSorter.invalidate()
+                }
                 .build()
         )
 

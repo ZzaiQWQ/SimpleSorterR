@@ -14,7 +14,7 @@ object SimpleSorterKeybindings {
     fun register() {
         sortKey = KeyBindingHelper.registerKeyBinding(
             KeyBinding(
-                "key.simplesorter.sort", // Translation key
+                "key.simplesorter.sort",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_R,
                 KeyBinding.Category.INVENTORY
@@ -23,7 +23,7 @@ object SimpleSorterKeybindings {
 
         configKey = KeyBindingHelper.registerKeyBinding(
             KeyBinding(
-                "key.simplesorter.config", // Translation key
+                "key.simplesorter.config",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_I,
                 KeyBinding.Category.INVENTORY

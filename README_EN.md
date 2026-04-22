@@ -13,16 +13,12 @@
 Open any container (inventory, chest, ender chest, etc.) and press **R** to instantly organize your items.
 
 - **Auto Stack Merging** — Automatically consolidates partial stacks of the same item into full stacks, freeing up valuable slots
-- **Category Sorting** — Items are arranged following the standard Creative Mode tab order:
-  1. Tools & Utilities
-  2. Combat
-  3. Building Blocks
-  4. Natural Blocks
-  5. Functional Blocks
-  6. Redstone
-  7. Food & Drinks
-  8. Ingredients
-  9. Spawn Eggs
+- **Creative Tab Native Sorting** — Items are arranged following Minecraft’s Creative Mode tab order, perfectly matching the game’s native item layout and automatically supporting modded items
+- **Custom Sort Order** — Adjust `tabOrder` in the config file to change tab priority
+- **Pinned Items** — Configure `pinnedItems` to keep specific items always sorted first
+- **Dynamic Container Blacklist** — All storage containers are sortable by default (including modded containers like Reinforced Chests). Functional containers (furnaces, crafting tables, etc.) are excluded via `blockedContainers` in the config file — no recompilation needed
+- **Bundle Compatibility** — Automatically detects Bundle interactions during sorting and uses safe swaps to prevent items from being accidentally stuffed in
+- **Config Hot-Reload** — Edit `simplesorter.json` directly, changes take effect on the next R-key sort without restarting the game
 - **Pure Client-Side** — Sorting is performed by simulating player clicks, making it fully compatible with any server — no server-side installation required
 
 ---
@@ -84,12 +80,16 @@ Hold **Caps Lock** and **double-click** any slot to **drop all identical items**
 
 Press **Z + I** (default combo) to open a graphical settings panel in-game:
 
-- **Category Sort Order** — Customize the priority of item categories
+- **Tab Sort Order (tabOrder)** — Customize the priority of Creative Mode tabs
+- **Pinned Items (pinnedItems)** — Specify item IDs that always sort to the front
+- **Container Blacklist (blockedContainers)** — Add container class names to exclude from sorting
 - **Z-Key Guard Toggle** — Disable the Z-key requirement to open settings with just I
 - **Auto Replacer Toggle** — Enable/disable automatic tool and item replacement
 - **Localized UI** — Settings interface automatically adapts to your game language (English / Chinese)
 
 Also accessible from **Mod Menu** if installed.
+
+> 💡 Advanced settings can be edited directly in `config/simplesorter.json`. Changes take effect on the next R-key sort.
 
 ---
 
@@ -110,7 +110,7 @@ Also accessible from **Mod Menu** if installed.
 
 1. Install **Fabric Loader** and **Fabric API**
 2. Download **Fabric Language Kotlin** and place it in your `mods` folder
-3. Drop `simplesorter-fabric-x.x.x-3.0.0.jar` into your `mods` folder
+3. Drop `simplesorter-fabric-x.x.x-3.3.0.jar` into your `mods` folder
 4. Launch the game and enjoy!
 
 ---
@@ -132,7 +132,9 @@ Also accessible from **Mod Menu** if installed.
 ## 📝 Technical Details
 
 - **Client-Side Only** — No server modifications; sorting is achieved by simulating player click actions
+- **Creative Tab Native Sorting** — Reads Minecraft’s Creative Mode tabs directly to build a sort index, perfectly matching the game’s native item order and automatically supporting all modded items
 - **Multi-Version Architecture** — Built with a `core` + `shared` + `platform` layered architecture, allowing one codebase to support multiple Minecraft versions
+- **Dynamic Config System** — Supports config file hot-reload, no game restart needed after edits
 - **Modular Mouse Tweaks** — Each mouse enhancement is an independent `MouseTweakModule`, making it easy to add or modify features
 - **License** — All Rights Reserved (See LICENSE file for strict usage terms)
 

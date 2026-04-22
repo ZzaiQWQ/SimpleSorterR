@@ -26,7 +26,6 @@ object LockManager {
                 "${playerUUID}_unknown-world"
             }
         }
-        System.out.println("[SimpleSorter] Profile ID: $id")
         return id
     }
 

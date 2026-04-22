@@ -3,13 +3,14 @@ package simplesorter.fabric
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import org.slf4j.LoggerFactory
+import simplesorter.mc.AutoReplacer
 import simplesorter.mc.InventoryScanner
 
 class SimpleSorterFabric : ClientModInitializer {
     private val logger = LoggerFactory.getLogger("simplesorter")
 
     override fun onInitializeClient() {
-        logger.info("Initializing SimpleSorter for 1.21.11!")
+        logger.info("Initializing SimpleSorter for 1.21.9!")
         
         SimpleSorterKeybindings.register()
         
@@ -31,6 +32,7 @@ class SimpleSorterFabric : ClientModInitializer {
             
             if (client.player != null) {
                 InventoryScanner.tickSort()
+                AutoReplacer.tick()
             }
         }
     }

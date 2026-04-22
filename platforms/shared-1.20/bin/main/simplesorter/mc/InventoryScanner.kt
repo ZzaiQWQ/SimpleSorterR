@@ -21,6 +21,7 @@ object InventoryScanner {
      */
     fun requestSort() {
         if (sorting) return  // Already sorting
+        simplesorter.mc.config.SimpleSorterConfig.reloadIfChanged()
         sorting = true
         sortPassesRemaining = MAX_PASSES
         logger.info("[SimpleSorter] Sort requested!")
@@ -72,9 +73,18 @@ object InventoryScanner {
         }
 
         // Scan and sort
+        // 动态黑名单：检查容器类名是否在配置的 blockedContainers 中
         val slotsToSort = if (handler is PlayerScreenHandler) {
             scanPlayerInventory(handler, player)
         } else {
+            val handlerClassName = handler.javaClass.simpleName
+            val isBlocked = simplesorter.mc.config.SimpleSorterConfig.blockedContainers.any { blocked ->
+                handlerClassName.contains(blocked, ignoreCase = true)
+            }
+            if (isBlocked) {
+                sorting = false
+                return
+            }
             scanContainerSlots(handler, player)
         }
 
@@ -130,12 +140,10 @@ object InventoryScanner {
     private fun makeSnapshot(slot: net.minecraft.screen.slot.Slot): SlotSnapshot {
         val stack = slot.stack
         val itemId = if (stack.isEmpty) "minecraft:air" else Registries.ITEM.getId(stack.item).toString()
-        // 1.20.1: use NBT instead of components
         val mergeKey = if (stack.isEmpty) "minecraft:air" else "$itemId|${stack.nbt}"
         
-        val categoryId = getCategoryId(stack)
-        var catIndex = simplesorter.mc.config.SimpleSorterConfig.categoryOrder.indexOf(categoryId)
-        if (catIndex == -1) catIndex = 999 // Unknown categories go to the end
+        val sortIndex = if (stack.isEmpty) Int.MAX_VALUE
+                        else CreativeTabSorter.getSortIndex(stack.item)
         
         return SlotSnapshot(
             slotId = slot.id,
@@ -143,67 +151,7 @@ object InventoryScanner {
             mergeKey = mergeKey,
             count = stack.count,
             maxCount = if (stack.isEmpty) 64 else stack.maxCount,
-            categoryIndex = catIndex
+            categoryIndex = sortIndex
         )
-    }
-
-    private fun getCategoryId(stack: net.minecraft.item.ItemStack): String {
-        if (stack.isEmpty) return "minecraft:air"
-        val item = stack.item
-        val className = item.javaClass.simpleName
-
-        // Combat
-        if (stack.isIn(net.minecraft.registry.tag.ItemTags.SWORDS) || 
-            stack.isIn(net.minecraft.registry.tag.ItemTags.AXES)) {
-            return "minecraft:combat"
-        }
-        if (className.contains("Armor") || className.contains("Bow") || 
-            className.contains("Crossbow") || className.contains("Trident") || 
-            className.contains("Shield")) {
-            return "minecraft:combat"
-        }
-        
-        // Tools & Utilities
-        if (stack.isIn(net.minecraft.registry.tag.ItemTags.PICKAXES) || 
-            stack.isIn(net.minecraft.registry.tag.ItemTags.SHOVELS) || 
-            stack.isIn(net.minecraft.registry.tag.ItemTags.HOES)) {
-            return "minecraft:tools_and_utilities"
-        }
-        if (className.contains("FishingRod") || className.contains("Shears") || 
-            className.contains("FlintAndSteel") || className.contains("Bucket")) {
-            return "minecraft:tools_and_utilities"
-        }
-        
-        // Food & Drinks — 1.20.1: use item.foodComponent instead of DataComponentTypes.FOOD
-        if (item.foodComponent != null) {
-            return "minecraft:food_and_drinks"
-        }
-        if (className.contains("Potion") || className.contains("HoneyBottle")) {
-            return "minecraft:food_and_drinks"
-        }
-        
-        // Blocks
-        if (item is net.minecraft.item.BlockItem) {
-            val blockName = item.block.javaClass.simpleName
-            if (blockName.contains("RedstoneWire") || 
-                blockName.contains("RedstoneTorch") || 
-                blockName.contains("GateBlock") || 
-                blockName.contains("Dispenser") || 
-                blockName.contains("Piston") || 
-                blockName.contains("Observer")) {
-                return "minecraft:redstone_blocks"
-            }
-            if (stack.isIn(net.minecraft.registry.tag.ItemTags.LOGS) || 
-                stack.isIn(net.minecraft.registry.tag.ItemTags.SAND) || 
-                stack.isIn(net.minecraft.registry.tag.ItemTags.LEAVES) || 
-                stack.isIn(net.minecraft.registry.tag.ItemTags.SAPLINGS) || 
-                blockName.contains("Plant")) {
-                return "minecraft:natural_blocks"
-            }
-            return "minecraft:building_blocks"
-        }
-        
-        // Default
-        return "minecraft:ingredients"
     }
 }

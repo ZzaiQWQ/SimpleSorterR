@@ -12,38 +12,77 @@ object ConfigScreen {
 
         val builder = ConfigBuilder.create()
             .setParentScreen(parent)
-            .setTitle(Text.literal("SimpleSorter 排序设置"))
+            .setTitle(Text.translatable("config.simplesorter.title"))
             .setSavingRunnable { 
                 SimpleSorterConfig.save() 
             }
             .setTransparentBackground(true)
             
         val entryBuilder = builder.entryBuilder()
-        val general = builder.getOrCreateCategory(Text.literal("常规/通用"))
+        val general = builder.getOrCreateCategory(Text.translatable("config.simplesorter.category.general"))
         
         general.addEntry(
-            entryBuilder.startBooleanToggle(Text.literal("需要长按 Z 键才能打开设置"), SimpleSorterConfig.requireZForConfig)
+            entryBuilder.startBooleanToggle(Text.translatable("config.simplesorter.requireZ"), SimpleSorterConfig.requireZForConfig)
                 .setDefaultValue(true)
-                .setTooltip(Text.literal("如果启用此选项，在按下设置快捷键的同时必须长按 Z 键才能打开此菜单。"))
+                .setTooltip(Text.translatable("config.simplesorter.requireZ.tooltip"))
                 .setSaveConsumer { value: Boolean -> SimpleSorterConfig.requireZForConfig = value }
                 .build()
         )
         
         general.addEntry(
-            entryBuilder.startStrList(Text.literal("分类排序顺序"), SimpleSorterConfig.categoryOrder)
+            entryBuilder.startStrList(Text.translatable("config.simplesorter.tabOrder"), SimpleSorterConfig.tabOrder)
                 .setDefaultValue(mutableListOf(
-                    "minecraft:tools_and_utilities",
-                    "minecraft:combat",
                     "minecraft:building_blocks",
+                    "minecraft:colored_blocks",
                     "minecraft:natural_blocks",
                     "minecraft:functional_blocks",
                     "minecraft:redstone_blocks",
+                    "minecraft:tools_and_utilities",
+                    "minecraft:combat",
                     "minecraft:food_and_drinks",
                     "minecraft:ingredients",
                     "minecraft:spawn_eggs"
                 ))
-                .setTooltip(Text.literal("排在上面的分类优先排序。你可以添加自定义物品组 (Item Group ID) 来优先排序它们。"))
-                .setSaveConsumer { list: List<String> -> SimpleSorterConfig.categoryOrder = list.toMutableList() }
+                .setTooltip(Text.translatable("config.simplesorter.tabOrder.tooltip"))
+                .setSaveConsumer { list: List<String> ->
+                    SimpleSorterConfig.tabOrder = list.toMutableList()
+                    simplesorter.mc.CreativeTabSorter.invalidate()
+                }
+                .build()
+        )
+
+        // ── Auto-replace category ──
+        val autoReplace = builder.getOrCreateCategory(Text.translatable("config.simplesorter.category.autoReplace"))
+
+        autoReplace.addEntry(
+            entryBuilder.startBooleanToggle(Text.translatable("config.simplesorter.replaceSameItem"), SimpleSorterConfig.autoReplaceSameItem)
+                .setDefaultValue(true)
+                .setTooltip(Text.translatable("config.simplesorter.replaceSameItem.tooltip"))
+                .setSaveConsumer { value: Boolean -> SimpleSorterConfig.autoReplaceSameItem = value }
+                .build()
+        )
+
+        autoReplace.addEntry(
+            entryBuilder.startBooleanToggle(Text.translatable("config.simplesorter.replaceSameType"), SimpleSorterConfig.autoReplaceSameType)
+                .setDefaultValue(true)
+                .setTooltip(Text.translatable("config.simplesorter.replaceSameType.tooltip"))
+                .setSaveConsumer { value: Boolean -> SimpleSorterConfig.autoReplaceSameType = value }
+                .build()
+        )
+
+        autoReplace.addEntry(
+            entryBuilder.startBooleanToggle(Text.translatable("config.simplesorter.autoRefill"), SimpleSorterConfig.autoRefillStack)
+                .setDefaultValue(true)
+                .setTooltip(Text.translatable("config.simplesorter.autoRefill.tooltip"))
+                .setSaveConsumer { value: Boolean -> SimpleSorterConfig.autoRefillStack = value }
+                .build()
+        )
+
+        autoReplace.addEntry(
+            entryBuilder.startIntSlider(Text.translatable("config.simplesorter.refillThreshold"), SimpleSorterConfig.refillThreshold, 1, 63)
+                .setDefaultValue(20)
+                .setTooltip(Text.translatable("config.simplesorter.refillThreshold.tooltip"))
+                .setSaveConsumer { value: Int -> SimpleSorterConfig.refillThreshold = value }
                 .build()
         )
         

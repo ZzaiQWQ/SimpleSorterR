@@ -4,9 +4,7 @@ import simplesorter.sort.SlotSnapshot
 import simplesorter.sort.Sorter
 import net.minecraft.client.MinecraftClient
 import net.minecraft.registry.Registries
-import net.minecraft.screen.GenericContainerScreenHandler
 import net.minecraft.screen.PlayerScreenHandler
-import net.minecraft.screen.ShulkerBoxScreenHandler
 import net.minecraft.screen.slot.SlotActionType
 import org.slf4j.LoggerFactory
 
@@ -23,6 +21,8 @@ object InventoryScanner {
      */
     fun requestSort() {
         if (sorting) return  // Already sorting
+        // Hot-reload config if file changed
+        simplesorter.mc.config.SimpleSorterConfig.reloadIfChanged()
         sorting = true
         sortPassesRemaining = MAX_PASSES
         logger.info("[SimpleSorter] Sort requested!")
@@ -74,14 +74,19 @@ object InventoryScanner {
         }
 
         // Scan and sort
-        // 只对存储型容器排序（箱子/木桶/末影箱/潜影盒），跳过熔炉/工作台/漏斗等
+        // 动态黑名单：检查容器类名是否在配置的 blockedContainers 中
         val slotsToSort = if (handler is PlayerScreenHandler) {
             scanPlayerInventory(handler, player)
-        } else if (handler is GenericContainerScreenHandler || handler is ShulkerBoxScreenHandler) {
-            scanContainerSlots(handler, player)
         } else {
-            sorting = false
-            return
+            val handlerClassName = handler.javaClass.simpleName
+            val isBlocked = simplesorter.mc.config.SimpleSorterConfig.blockedContainers.any { blocked ->
+                handlerClassName.contains(blocked, ignoreCase = true)
+            }
+            if (isBlocked) {
+                sorting = false
+                return
+            }
+            scanContainerSlots(handler, player)
         }
 
         if (slotsToSort.isEmpty() || slotsToSort.all { it.itemId == "minecraft:air" }) {
@@ -138,9 +143,8 @@ object InventoryScanner {
         val itemId = if (stack.isEmpty) "minecraft:air" else Registries.ITEM.getId(stack.item).toString()
         val mergeKey = if (stack.isEmpty) "minecraft:air" else "$itemId|${stack.components}"
         
-        val categoryId = getCategoryId(stack)
-        var catIndex = simplesorter.mc.config.SimpleSorterConfig.categoryOrder.indexOf(categoryId)
-        if (catIndex == -1) catIndex = 999 // Unknown categories go to the end
+        val sortIndex = if (stack.isEmpty) Int.MAX_VALUE
+                        else CreativeTabSorter.getSortIndex(stack.item)
         
         return SlotSnapshot(
             slotId = slot.id,
@@ -148,68 +152,7 @@ object InventoryScanner {
             mergeKey = mergeKey,
             count = stack.count,
             maxCount = if (stack.isEmpty) 64 else stack.maxCount,
-            categoryIndex = catIndex
+            categoryIndex = sortIndex
         )
-    }
-
-    private fun getCategoryId(stack: net.minecraft.item.ItemStack): String {
-        if (stack.isEmpty) return "minecraft:air"
-        val item = stack.item
-        val className = item.javaClass.simpleName
-
-        // Combat
-        if (stack.isIn(net.minecraft.registry.tag.ItemTags.SWORDS) || 
-            stack.isIn(net.minecraft.registry.tag.ItemTags.AXES)) {
-            return "minecraft:combat"
-        }
-        if (className.contains("Armor") || className.contains("Bow") || 
-            className.contains("Crossbow") || className.contains("Trident") || 
-            className.contains("Shield")) {
-            return "minecraft:combat"
-        }
-        
-        // Tools & Utilities
-        if (stack.isIn(net.minecraft.registry.tag.ItemTags.PICKAXES) || 
-            stack.isIn(net.minecraft.registry.tag.ItemTags.SHOVELS) || 
-            stack.isIn(net.minecraft.registry.tag.ItemTags.HOES)) {
-            return "minecraft:tools_and_utilities"
-        }
-        if (className.contains("FishingRod") || className.contains("Shears") || 
-            className.contains("FlintAndSteel") || className.contains("Bucket")) {
-            return "minecraft:tools_and_utilities"
-        }
-        
-        // Food & Drinks
-        if (stack.contains(net.minecraft.component.DataComponentTypes.FOOD)) {
-            return "minecraft:food_and_drinks"
-        }
-        if (className.contains("Potion") || className.contains("HoneyBottle")) {
-            return "minecraft:food_and_drinks"
-        }
-        
-        // Blocks
-        if (item is net.minecraft.item.BlockItem) {
-            val blockName = item.block.javaClass.simpleName
-            if (blockName.contains("RedstoneWire") || 
-                blockName.contains("RedstoneTorch") || 
-                blockName.contains("GateBlock") || 
-                blockName.contains("Dispenser") || 
-                blockName.contains("Piston") || 
-                blockName.contains("Observer")) {
-                return "minecraft:redstone_blocks"
-            }
-            if (stack.isIn(net.minecraft.registry.tag.ItemTags.LOGS) || 
-                stack.isIn(net.minecraft.registry.tag.ItemTags.DIRT) || 
-                stack.isIn(net.minecraft.registry.tag.ItemTags.SAND) || 
-                stack.isIn(net.minecraft.registry.tag.ItemTags.LEAVES) || 
-                stack.isIn(net.minecraft.registry.tag.ItemTags.SAPLINGS) || 
-                blockName.contains("Plant")) {
-                return "minecraft:natural_blocks"
-            }
-            return "minecraft:building_blocks"
-        }
-        
-        // Default
-        return "minecraft:ingredients"
     }
 }
