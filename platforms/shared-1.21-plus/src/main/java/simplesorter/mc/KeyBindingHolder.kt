@@ -11,14 +11,11 @@ object KeyBindingHolder {
     var lockKey: KeyBinding? = null
     var batchDropKey: KeyBinding? = null
 
-    var lockKeyHeldSupplier: (() -> Boolean)? = null
-    var batchDropKeyHeldSupplier: (() -> Boolean)? = null
-
     val isLockKeyHeld: Boolean
-        get() = lockKeyHeldSupplier?.invoke() ?: checkKeyData(lockKey)
+        get() = checkKeyData(lockKey)
 
     val isBatchDropKeyHeld: Boolean
-        get() = batchDropKeyHeldSupplier?.invoke() ?: checkKeyData(batchDropKey)
+        get() = checkKeyData(batchDropKey)
 
     private fun checkKeyData(keyBinding: KeyBinding?): Boolean {
         if (keyBinding == null || keyBinding.isUnbound) return false

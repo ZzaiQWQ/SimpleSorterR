@@ -3,6 +3,8 @@ package simplesorter.mc
 import simplesorter.sort.SlotSnapshot
 import simplesorter.sort.Sorter
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.ingame.HandledScreen
+import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.screen.PlayerScreenHandler
 import net.minecraft.screen.slot.SlotActionType
@@ -17,7 +19,7 @@ object InventoryScanner {
     private const val MAX_PASSES = 10  // Safety limit
 
     /**
-     * Called by Mixin when R is pressed. Starts the auto-sort process.
+     * Called from HandledScreenMixin.keyPressed when the sort key is pressed.
      */
     fun requestSort() {
         if (sorting) return  // Already sorting
@@ -45,29 +47,43 @@ object InventoryScanner {
             return
         }
 
-        // If inventory screen was closed, stop sorting
-        if (client.currentScreen == null) {
+        // Only sort when a HandledScreen (inventory/container GUI) is open
+        if (client.currentScreen == null || client.currentScreen !is HandledScreen<*>) {
             sorting = false
             return
         }
 
-        // Safety: clear cursor first — place items back into the correct inventory
+        // Safety: clear cursor first — try merge into same item stack, then empty slot
         val cursorStack = handler.cursorStack
         if (cursorStack != null && !cursorStack.isEmpty) {
             val isContainer = handler !is PlayerScreenHandler
+            
+            // Step 1: Try to merge into an existing stack of the same item
             for (slot in handler.slots) {
-                val isTargetSlot = if (isContainer) {
-                    // Sorting container — put cursor items back into the container
-                    slot.inventory != player.inventory && slot.stack.isEmpty
-                } else {
-                    // Sorting player inventory — put into main inventory
-                    slot.inventory == player.inventory && slot.index in 9..35 && slot.stack.isEmpty
-                }
-                if (isTargetSlot) {
+                val isTargetSide = if (isContainer) slot.inventory != player.inventory else (slot.inventory == player.inventory && slot.index in 9..35)
+                if (isTargetSide && !slot.stack.isEmpty && ItemStack.areItemsAndComponentsEqual(cursorStack, slot.stack) && slot.stack.count < slot.stack.maxCount) {
                     interactionManager.clickSlot(handler.syncId, slot.id, 0, SlotActionType.PICKUP, player)
-                    return  // Wait one tick for the cursor to clear
+                    return  // Wait one tick
                 }
             }
+            
+            // Step 2: Try empty slot on the same side
+            for (slot in handler.slots) {
+                val isTargetSide = if (isContainer) slot.inventory != player.inventory else (slot.inventory == player.inventory && slot.index in 9..35)
+                if (isTargetSide && slot.stack.isEmpty) {
+                    interactionManager.clickSlot(handler.syncId, slot.id, 0, SlotActionType.PICKUP, player)
+                    return
+                }
+            }
+            
+            // Step 3: Try any empty slot as last resort
+            for (slot in handler.slots) {
+                if (slot.stack.isEmpty) {
+                    interactionManager.clickSlot(handler.syncId, slot.id, 0, SlotActionType.PICKUP, player)
+                    return
+                }
+            }
+            
             // Can't clear cursor — abort
             sorting = false
             return

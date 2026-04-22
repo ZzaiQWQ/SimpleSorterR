@@ -11,8 +11,6 @@ object SimpleSorterConfig {
     private val CONFIG_FILE = FabricLoader.getInstance().configDir.resolve("simplesorter.json")
 
     // The default hotkey to sort the inventory
-    var sortKeyRaw: String = "key.keyboard.r"
-    
     var requireZForConfig: Boolean = true
 
     // Auto-replace settings
@@ -95,9 +93,11 @@ object SimpleSorterConfig {
                 val arr = json.getAsJsonArray("blockedContainers")
                 val list = mutableListOf<String>()
                 for (e in arr) list.add(e.asString)
-                if (list.isNotEmpty()) blockedContainers = list
+                blockedContainers = list
             }
             
+            // Full reload: clear old data before loading
+            worldLockedSlots.clear()
             if (json.has("worldLockedSlots")) {
                 val mapObj = json.getAsJsonObject("worldLockedSlots")
                 for (entry in mapObj.entrySet()) {
@@ -117,9 +117,7 @@ object SimpleSorterConfig {
                 for (elem in array) {
                     loadedList.add(elem.asString)
                 }
-                if (loadedList.isNotEmpty()) {
-                    tabOrder = loadedList
-                }
+                tabOrder = loadedList
             }
 
             if (json.has("pinnedItems")) {

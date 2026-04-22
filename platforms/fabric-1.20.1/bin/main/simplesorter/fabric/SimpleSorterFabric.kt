@@ -15,9 +15,7 @@ class SimpleSorterFabric : ClientModInitializer {
         SimpleSorterKeybindings.register()
         
         ClientTickEvents.END_CLIENT_TICK.register { client ->
-            while (SimpleSorterKeybindings.sortKey.wasPressed()) {
-                simplesorter.mc.InventoryScanner.requestSort()
-            }
+            // Config key (Z+I) needs to work outside of HandledScreen too
             while (SimpleSorterKeybindings.configKey.wasPressed()) {
                 val config = simplesorter.mc.config.SimpleSorterConfig
                 val requireZ = config.requireZForConfig
@@ -29,7 +27,7 @@ class SimpleSorterFabric : ClientModInitializer {
                     client.setScreen(simplesorter.mc.config.ConfigScreen.build(client.currentScreen))
                 }
             }
-            
+
             if (client.player != null) {
                 InventoryScanner.tickSort()
                 AutoReplacer.tick()

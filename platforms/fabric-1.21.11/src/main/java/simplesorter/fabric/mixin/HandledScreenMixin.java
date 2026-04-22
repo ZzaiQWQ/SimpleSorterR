@@ -1,11 +1,10 @@
 package simplesorter.fabric.mixin;
 
-import simplesorter.mc.InventoryScanner;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -13,35 +12,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(HandledScreen.class)
 public class HandledScreenMixin {
 
-    @Unique
-    private long lastSortTime = 0;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void onKeyPressed(net.minecraft.client.input.KeyInput keyInput, CallbackInfoReturnable<Boolean> cir) {
         if (simplesorter.fabric.SimpleSorterKeybindings.INSTANCE.getSortKey().matchesKey(keyInput)) {
-            long now = System.currentTimeMillis();
-            if (now - lastSortTime > 500) {
-                lastSortTime = now;
-                InventoryScanner.INSTANCE.requestSort();
-            }
+            simplesorter.mc.InventoryScanner.INSTANCE.requestSort();
             cir.setReturnValue(true);
-            return;
         }
-
         if (simplesorter.fabric.SimpleSorterKeybindings.INSTANCE.getConfigKey().matchesKey(keyInput)) {
+            net.minecraft.client.MinecraftClient client = net.minecraft.client.MinecraftClient.getInstance();
             simplesorter.mc.config.SimpleSorterConfig config = simplesorter.mc.config.SimpleSorterConfig.INSTANCE;
             boolean requireZ = config.getRequireZForConfig();
-            boolean isZPressed = GLFW.glfwGetKey(
-                    net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle(),
+            boolean isZPressed = GLFW.glfwGetKey(client.getWindow().getHandle(),
                     GLFW.GLFW_KEY_Z) == GLFW.GLFW_PRESS;
             if (!requireZ || isZPressed) {
-                net.minecraft.client.MinecraftClient client = net.minecraft.client.MinecraftClient.getInstance();
                 client.setScreen(simplesorter.mc.config.ConfigScreen.INSTANCE.build(client.currentScreen));
                 cir.setReturnValue(true);
-                return;
             }
         }
-
     }
 
 

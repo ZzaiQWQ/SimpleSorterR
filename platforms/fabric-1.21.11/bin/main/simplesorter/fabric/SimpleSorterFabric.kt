@@ -15,9 +15,6 @@ class SimpleSorterFabric : ClientModInitializer {
         simplesorter.fabric.SimpleSorterKeybindings.register()
         
         net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register { client ->
-            while (simplesorter.fabric.SimpleSorterKeybindings.sortKey.wasPressed()) {
-                simplesorter.mc.InventoryScanner.requestSort()
-            }
             while (simplesorter.fabric.SimpleSorterKeybindings.configKey.wasPressed()) {
                 val config = simplesorter.mc.config.SimpleSorterConfig
                 val requireZ = config.requireZForConfig
@@ -29,7 +26,7 @@ class SimpleSorterFabric : ClientModInitializer {
                     client.setScreen(simplesorter.mc.config.ConfigScreen.build(client.currentScreen))
                 }
             }
-            
+
             InventoryScanner.tickSort()
             AutoReplacer.tick()
         }

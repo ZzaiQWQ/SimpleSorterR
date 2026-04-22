@@ -37,7 +37,7 @@ class QDoubleClickDropTweak : MouseTweakModule {
         if (isDoubleClick && !slot.stack.isEmpty) {
             val matchStack = slot.stack
 
-            System.out.println("[SimpleSorter] Batch drop! Matching: ${matchStack.count}x ${matchStack.item}")
+
 
             val cursorStack = handler.cursorStack
             if (!cursorStack.isEmpty && ItemStack.areItemsAndComponentsEqual(matchStack, cursorStack)) {
@@ -53,7 +53,7 @@ class QDoubleClickDropTweak : MouseTweakModule {
             val targetInventory = slot.inventory
             for (s in handler.slots) {
                 if (s.inventory == targetInventory && !s.stack.isEmpty && ItemStack.areItemsAndComponentsEqual(matchStack, s.stack)) {
-                    System.out.println("[SimpleSorter] Throwing slot ${s.id}: ${s.stack.count}x ${s.stack.item}")
+
                     interactionManager.clickSlot(
                         handler.syncId,
                         s.id,

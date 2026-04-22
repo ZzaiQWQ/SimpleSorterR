@@ -1,14 +1,12 @@
 package simplesorter.fabric.mixin;
 
-import simplesorter.mc.InventoryScanner;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.screen.slot.Slot;
 
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -17,32 +15,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(HandledScreen.class)
 public class HandledScreenMixin {
 
-    @Unique
-    private long lastSortTime = 0;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void onKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (simplesorter.fabric.SimpleSorterKeybindings.INSTANCE.getSortKey().matchesKey(keyCode, scanCode)) {
-            long now = System.currentTimeMillis();
-            if (now - lastSortTime > 500) {
-                lastSortTime = now;
-                InventoryScanner.INSTANCE.requestSort();
-            }
+            simplesorter.mc.InventoryScanner.INSTANCE.requestSort();
             cir.setReturnValue(true);
-            return;
         }
-
         if (simplesorter.fabric.SimpleSorterKeybindings.INSTANCE.getConfigKey().matchesKey(keyCode, scanCode)) {
+            MinecraftClient client = MinecraftClient.getInstance();
             simplesorter.mc.config.SimpleSorterConfig config = simplesorter.mc.config.SimpleSorterConfig.INSTANCE;
             boolean requireZ = config.getRequireZForConfig();
-            boolean isZPressed = GLFW.glfwGetKey(
-                    MinecraftClient.getInstance().getWindow().getHandle(),
-                    GLFW.GLFW_KEY_Z) == GLFW.GLFW_PRESS;
+            boolean isZPressed = org.lwjgl.glfw.GLFW.glfwGetKey(client.getWindow().getHandle(),
+                    org.lwjgl.glfw.GLFW.GLFW_KEY_Z) == org.lwjgl.glfw.GLFW.GLFW_PRESS;
             if (!requireZ || isZPressed) {
-                MinecraftClient client = MinecraftClient.getInstance();
                 client.setScreen(simplesorter.mc.config.ConfigScreen.INSTANCE.build(client.currentScreen));
                 cir.setReturnValue(true);
-                return;
             }
         }
     }

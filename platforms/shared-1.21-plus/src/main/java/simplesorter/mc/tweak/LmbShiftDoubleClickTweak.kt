@@ -60,6 +60,7 @@ class LmbShiftDoubleClickTweak : MouseTweakModule {
             }
         }
         
+        // First click: let vanilla handle it normally (Shift-click moves item as expected)
         return false
     }
 }
