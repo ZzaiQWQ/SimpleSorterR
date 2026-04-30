@@ -95,7 +95,7 @@ object InventoryScanner {
         } else {
             val handlerClassName = handler.javaClass.simpleName
             val isBlocked = simplesorter.mc.config.SimpleSorterConfig.blockedContainers.any { blocked ->
-                handlerClassName.contains(blocked, ignoreCase = true)
+                handlerClassName.equals(blocked, ignoreCase = true)
             }
             if (isBlocked) {
                 sorting = false

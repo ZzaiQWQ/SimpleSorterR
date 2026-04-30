@@ -59,6 +59,9 @@ object SimpleSorterConfig {
     // Items that always sort to the very front
     var pinnedItems: MutableList<String> = mutableListOf()
 
+    // Overlay color for locked slots. Supports #RRGGBB and #AARRGGBB.
+    var lockOverlayColor: String = "#80FF0000"
+
     // Track file modification time for hot-reload
     private var lastModified: FileTime? = null
 
@@ -89,12 +92,25 @@ object SimpleSorterConfig {
         try {
             val jsonStr = Files.readString(CONFIG_FILE)
             val json = GSON.fromJson(jsonStr, JsonObject::class.java)
+            val shouldSaveDefaults = listOf(
+                "requireZForConfig",
+                "autoReplaceSameItem",
+                "autoReplaceSameType",
+                "autoRefillStack",
+                "refillThreshold",
+                "blockedContainers",
+                "worldLockedSlots",
+                "tabOrder",
+                "pinnedItems",
+                "lockOverlayColor"
+            ).any { !json.has(it) }
 
             if (json.has("requireZForConfig")) requireZForConfig = json.get("requireZForConfig").asBoolean
             if (json.has("autoReplaceSameItem")) autoReplaceSameItem = json.get("autoReplaceSameItem").asBoolean
             if (json.has("autoReplaceSameType")) autoReplaceSameType = json.get("autoReplaceSameType").asBoolean
             if (json.has("autoRefillStack")) autoRefillStack = json.get("autoRefillStack").asBoolean
             if (json.has("refillThreshold")) refillThreshold = json.get("refillThreshold").asInt
+            if (json.has("lockOverlayColor")) lockOverlayColor = json.get("lockOverlayColor").asString
 
             if (json.has("blockedContainers")) {
                 val arr = json.getAsJsonArray("blockedContainers")
@@ -135,8 +151,43 @@ object SimpleSorterConfig {
             }
 
             lastModified = Files.getLastModifiedTime(CONFIG_FILE)
+            if (shouldSaveDefaults) {
+                save()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    fun toggleBlockedContainer(className: String): Boolean {
+        val existing = blockedContainers.firstOrNull { it.equals(className, ignoreCase = true) }
+        val added = if (existing != null) {
+            blockedContainers.remove(existing)
+            false
+        } else {
+            blockedContainers.add(className)
+            true
+        }
+        save()
+        return added
+    }
+
+    fun getLockOverlayColorArgb(): Int {
+        val raw = lockOverlayColor.trim()
+            .removePrefix("#")
+            .removePrefix("0x")
+            .removePrefix("0X")
+
+        val normalized = when (raw.length) {
+            6 -> "80$raw"
+            8 -> raw
+            else -> return 0x80FF0000.toInt()
+        }
+
+        return try {
+            normalized.toLong(16).toInt()
+        } catch (_: Exception) {
+            0x80FF0000.toInt()
         }
     }
 
@@ -148,6 +199,7 @@ object SimpleSorterConfig {
             json.addProperty("autoReplaceSameType", autoReplaceSameType)
             json.addProperty("autoRefillStack", autoRefillStack)
             json.addProperty("refillThreshold", refillThreshold)
+            json.addProperty("lockOverlayColor", lockOverlayColor)
 
             val blockedArr = com.google.gson.JsonArray()
             for (name in blockedContainers) blockedArr.add(name)

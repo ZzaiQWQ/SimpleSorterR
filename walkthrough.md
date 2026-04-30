@@ -1,4 +1,4 @@
-# SimpleSorter 3.3.0 — 改动记录
+# SimpleSorter 3.5.0 — 改动记录
 
 ---
 
@@ -117,4 +117,3 @@
 - ✅ Clean build 通过 (13 tasks executed)
 - ✅ 运行时日志：`Built creative tab sort index: 1487 items (0 pinned)`
 - ✅ 排序功能正常：`Fully sorted!`
-

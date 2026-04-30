@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.screen.slot.Slot;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,6 +33,10 @@ public class HandledScreenMixin {
                 client.setScreen(simplesorter.mc.config.ConfigScreen.INSTANCE.build(client.currentScreen));
                 cir.setReturnValue(true);
             }
+        }
+        if (simplesorter.fabric.SimpleSorterKeybindings.INSTANCE.getBlockContainerKey().matchesKey(keyCode, scanCode)) {
+            simpleSorter$toggleCurrentContainerBlock();
+            cir.setReturnValue(true);
         }
     }
 
@@ -76,7 +81,31 @@ public class HandledScreenMixin {
 
         if (isLocked) {
             // Draw a semi-transparent red overlay to indicate the slot is locked
-            context.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x60FF0000);
+            context.fill(slot.x, slot.y, slot.x + 16, slot.y + 16,
+                    simplesorter.mc.config.SimpleSorterConfig.INSTANCE.getLockOverlayColorArgb());
         }
+    }
+
+    @Unique
+    private void simpleSorter$toggleCurrentContainerBlock() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player == null) {
+            return;
+        }
+
+        var handler = client.player.currentScreenHandler;
+        if (handler == null || handler instanceof net.minecraft.screen.PlayerScreenHandler) {
+            client.player.sendMessage(
+                    net.minecraft.text.Text.translatable("message.simplesorter.block_container.inventory_not_allowed"),
+                    false);
+            return;
+        }
+
+        String className = handler.getClass().getSimpleName();
+        boolean added = simplesorter.mc.config.SimpleSorterConfig.INSTANCE.toggleBlockedContainer(className);
+        String translationKey = added
+                ? "message.simplesorter.block_container.blocked"
+                : "message.simplesorter.block_container.unblocked";
+        client.player.sendMessage(net.minecraft.text.Text.translatable(translationKey, className), false);
     }
 }

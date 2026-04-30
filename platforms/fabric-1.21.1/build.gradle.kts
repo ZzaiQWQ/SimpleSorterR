@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm") version "2.0.0"
 }
 
-version = "3.3.0"
+version = "3.5.0"
 group = "simplesorter"
 
 base {

@@ -3,11 +3,15 @@ package simplesorter.fabric
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.minecraft.client.option.KeyBinding
 import net.minecraft.client.util.InputUtil
+import net.minecraft.util.Identifier
 import org.lwjgl.glfw.GLFW
 
 object SimpleSorterKeybindings {
+    private val CATEGORY = KeyBinding.Category.create(Identifier.of("simplesorter", "simplesorter"))
+
     lateinit var sortKey: KeyBinding
     lateinit var configKey: KeyBinding
+    lateinit var blockContainerKey: KeyBinding
     lateinit var lockKey: KeyBinding
     lateinit var batchDropKey: KeyBinding
 
@@ -17,7 +21,7 @@ object SimpleSorterKeybindings {
                 "key.simplesorter.sort",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_R,
-                KeyBinding.Category.INVENTORY
+                CATEGORY
             )
         )
 
@@ -26,7 +30,16 @@ object SimpleSorterKeybindings {
                 "key.simplesorter.config",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_I,
-                KeyBinding.Category.INVENTORY
+                CATEGORY
+            )
+        )
+
+        blockContainerKey = KeyBindingHelper.registerKeyBinding(
+            KeyBinding(
+                "key.simplesorter.block_container",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_B,
+                CATEGORY
             )
         )
 
@@ -35,7 +48,7 @@ object SimpleSorterKeybindings {
                 "key.simplesorter.lock",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_LEFT_ALT,
-                KeyBinding.Category.INVENTORY
+                CATEGORY
             )
         )
 
@@ -44,7 +57,7 @@ object SimpleSorterKeybindings {
                 "key.simplesorter.batchdrop",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_CAPS_LOCK,
-                KeyBinding.Category.INVENTORY
+                CATEGORY
             )
         )
 

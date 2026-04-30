@@ -2,6 +2,7 @@
     "key.categories.simplesorter": "SimpleSorter",
     "key.simplesorter.sort": "Sort Inventory",
     "key.simplesorter.config": "Open Settings",
+    "key.simplesorter.block_container": "Toggle Container Block",
     "key.simplesorter.lock": "Lock Slot",
     "key.simplesorter.batchdrop": "Batch Drop",
 
@@ -11,15 +12,21 @@
 
     "config.simplesorter.requireZ": "Require holding Z to open settings",
     "config.simplesorter.requireZ.tooltip": "When enabled, you must hold Z while pressing the settings key to open this menu.",
+    "config.simplesorter.tabOrder": "Category Sort Order",
+    "config.simplesorter.tabOrder.tooltip": "Categories listed first have higher sorting priority. You can add custom Item Group IDs.",
     "config.simplesorter.categoryOrder": "Category Sort Order",
     "config.simplesorter.categoryOrder.tooltip": "Categories listed first have higher sorting priority. You can add custom Item Group IDs.",
 
     "config.simplesorter.replaceSameItem": "Replace broken tool with same item",
     "config.simplesorter.replaceSameItem.tooltip": "When your held tool breaks, auto-replace it with the same item from inventory.",
     "config.simplesorter.replaceSameType": "Replace broken tool with same type",
-    "config.simplesorter.replaceSameType.tooltip": "If no exact match found, replace with same tool type (e.g. iron pickaxe → diamond pickaxe).",
+    "config.simplesorter.replaceSameType.tooltip": "If no exact match is found, replace it with the same tool type, for example iron pickaxe -> diamond pickaxe.",
     "config.simplesorter.autoRefill": "Auto-refill stackable items",
-    "config.simplesorter.autoRefill.tooltip": "When held stackable item count drops below threshold, auto-refill from inventory.",
+    "config.simplesorter.autoRefill.tooltip": "When your held stackable item count drops below the threshold, auto-refill it from inventory.",
     "config.simplesorter.refillThreshold": "Refill Threshold",
-    "config.simplesorter.refillThreshold.tooltip": "Refill when 64-stack items drop below this count. 16-stack items auto-use half (8)."
+    "config.simplesorter.refillThreshold.tooltip": "Refill when 64-stack items drop below this count. 16-stack items automatically use half of the threshold.",
+
+    "message.simplesorter.block_container.blocked": "[SimpleSorter] Blocked container: %s",
+    "message.simplesorter.block_container.unblocked": "[SimpleSorter] Unblocked container: %s",
+    "message.simplesorter.block_container.inventory_not_allowed": "[SimpleSorter] Player inventory cannot be blocked"
 }
