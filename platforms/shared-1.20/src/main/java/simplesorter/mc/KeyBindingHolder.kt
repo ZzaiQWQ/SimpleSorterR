@@ -8,12 +8,16 @@ import net.minecraft.client.option.KeyBinding
 object KeyBindingHolder {
     var lockKey: KeyBinding? = null
     var batchDropKey: KeyBinding? = null
+    var depositMatchingKey: KeyBinding? = null
 
     val isLockKeyHeld: Boolean
         get() = checkKeyData(lockKey)
 
     val isBatchDropKeyHeld: Boolean
         get() = checkKeyData(batchDropKey)
+
+    val isDepositMatchingKeyHeld: Boolean
+        get() = checkKeyData(depositMatchingKey)
 
     private fun checkKeyData(keyBinding: KeyBinding?): Boolean {
         if (keyBinding == null || keyBinding.isUnbound) return false
@@ -40,6 +44,8 @@ object KeyBindingHolder {
                 isPressed = org.lwjgl.glfw.GLFW.glfwGetKey(handle, org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_ALT) == org.lwjgl.glfw.GLFW.GLFW_PRESS
             } else if (translationKey == "key.keyboard.caps.lock") {
                 isPressed = org.lwjgl.glfw.GLFW.glfwGetKey(handle, org.lwjgl.glfw.GLFW.GLFW_KEY_CAPS_LOCK) == org.lwjgl.glfw.GLFW.GLFW_PRESS
+            } else if (translationKey == "key.keyboard.v") {
+                isPressed = org.lwjgl.glfw.GLFW.glfwGetKey(handle, org.lwjgl.glfw.GLFW.GLFW_KEY_V) == org.lwjgl.glfw.GLFW.GLFW_PRESS
             }
         }
 

@@ -2,7 +2,7 @@
     "schemaVersion": 1,
     "id": "simplesorter",
     "version": "${version}",
-    "name": "SimpleSorter",
+    "name": "SimpleSorterR",
     "description": "Minimal client-side R-key inventory sorting",
     "authors": [
         "Zzai"

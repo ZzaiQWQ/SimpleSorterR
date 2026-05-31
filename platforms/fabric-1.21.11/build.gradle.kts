@@ -4,11 +4,11 @@ plugins {
     kotlin("jvm") version "2.0.0"
 }
 
-version = "3.5.0"
+version = "3.6.0"
 group = "simplesorter"
 
 base {
-    archivesName.set("simplesorter-fabric-1.21.11")
+    archivesName.set("SimpleSorterR-fabric-1.21.11")
 }
 
 repositories {

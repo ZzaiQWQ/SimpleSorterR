@@ -26,6 +26,14 @@ object ConfigScreen {
                 .setSaveConsumer { value: Boolean -> SimpleSorterConfig.requireZForConfig = value }
                 .build()
         )
+
+        general.addEntry(
+            entryBuilder.startBooleanToggle(Text.translatable("config.simplesorter.sortInventoryWhenNoScreen"), SimpleSorterConfig.sortInventoryWhenNoScreen)
+                .setDefaultValue(false)
+                .setTooltip(Text.translatable("config.simplesorter.sortInventoryWhenNoScreen.tooltip"))
+                .setSaveConsumer { value: Boolean -> SimpleSorterConfig.sortInventoryWhenNoScreen = value }
+                .build()
+        )
         
         general.addEntry(
             entryBuilder.startStrList(Text.translatable("config.simplesorter.tabOrder"), SimpleSorterConfig.tabOrder)

@@ -10,7 +10,7 @@ class SimpleSorterFabric : ClientModInitializer {
     private val logger = LoggerFactory.getLogger("simplesorter")
 
     override fun onInitializeClient() {
-        logger.info("Initializing SimpleSorter for 1.21.10!")
+        logger.info("Initializing SimpleSorterR for 1.21.10!")
         
         SimpleSorterKeybindings.register()
         
@@ -24,6 +24,12 @@ class SimpleSorterFabric : ClientModInitializer {
                 ) == org.lwjgl.glfw.GLFW.GLFW_PRESS
                 if (!requireZ || isZPressed) {
                     client.setScreen(simplesorter.mc.config.ConfigScreen.build(client.currentScreen))
+                }
+            }
+
+            while (SimpleSorterKeybindings.sortKey.wasPressed()) {
+                if (client.currentScreen == null && simplesorter.mc.config.SimpleSorterConfig.sortInventoryWhenNoScreen) {
+                    InventoryScanner.requestSort()
                 }
             }
 

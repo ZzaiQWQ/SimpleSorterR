@@ -12,6 +12,7 @@ object SimpleSorterConfig {
 
     // The default hotkey to sort the inventory
     var requireZForConfig: Boolean = true
+    var sortInventoryWhenNoScreen: Boolean = false
 
     // Auto-replace settings
     var autoReplaceSameItem: Boolean = true
@@ -86,6 +87,7 @@ object SimpleSorterConfig {
             val json = GSON.fromJson(jsonStr, JsonObject::class.java)
             val shouldSaveDefaults = listOf(
                 "requireZForConfig",
+                "sortInventoryWhenNoScreen",
                 "autoReplaceSameItem",
                 "autoReplaceSameType",
                 "autoRefillStack",
@@ -98,6 +100,7 @@ object SimpleSorterConfig {
             ).any { !json.has(it) }
 
             if (json.has("requireZForConfig")) requireZForConfig = json.get("requireZForConfig").asBoolean
+            if (json.has("sortInventoryWhenNoScreen")) sortInventoryWhenNoScreen = json.get("sortInventoryWhenNoScreen").asBoolean
             if (json.has("autoReplaceSameItem")) autoReplaceSameItem = json.get("autoReplaceSameItem").asBoolean
             if (json.has("autoReplaceSameType")) autoReplaceSameType = json.get("autoReplaceSameType").asBoolean
             if (json.has("autoRefillStack")) autoRefillStack = json.get("autoRefillStack").asBoolean
@@ -187,6 +190,7 @@ object SimpleSorterConfig {
         try {
             val json = JsonObject()
             json.addProperty("requireZForConfig", requireZForConfig)
+            json.addProperty("sortInventoryWhenNoScreen", sortInventoryWhenNoScreen)
             json.addProperty("autoReplaceSameItem", autoReplaceSameItem)
             json.addProperty("autoReplaceSameType", autoReplaceSameType)
             json.addProperty("autoRefillStack", autoRefillStack)

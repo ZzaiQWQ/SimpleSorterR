@@ -1,18 +1,21 @@
 {
-    "key.categories.simplesorter": "SimpleSorter",
-    "key.category.simplesorter.simplesorter": "SimpleSorter",
+    "key.categories.simplesorter": "SimpleSorterR",
+    "key.category.simplesorter.simplesorter": "SimpleSorterR",
     "key.simplesorter.sort": "Sort Inventory",
     "key.simplesorter.config": "Open Settings",
     "key.simplesorter.block_container": "Toggle Container Block",
     "key.simplesorter.lock": "Lock Slot",
     "key.simplesorter.batchdrop": "Batch Drop",
+    "key.simplesorter.deposit_matching": "Deposit Matching Items",
 
-    "config.simplesorter.title": "SimpleSorter Settings",
+    "config.simplesorter.title": "SimpleSorterR Settings",
     "config.simplesorter.category.general": "General",
     "config.simplesorter.category.autoReplace": "Auto Replace",
 
     "config.simplesorter.requireZ": "Require holding Z to open settings",
     "config.simplesorter.requireZ.tooltip": "When enabled, you must hold Z while pressing the settings key to open this menu.",
+    "config.simplesorter.sortInventoryWhenNoScreen": "Allow sorting main inventory with R while no screen is open",
+    "config.simplesorter.sortInventoryWhenNoScreen.tooltip": "When enabled, pressing R with no screen open sorts the player main inventory only and does not touch the hotbar.",
     "config.simplesorter.tabOrder": "Category Sort Order",
     "config.simplesorter.tabOrder.tooltip": "Categories listed first have higher sorting priority. You can add custom Item Group IDs.",
     "config.simplesorter.categoryOrder": "Category Sort Order",
@@ -27,7 +30,7 @@
     "config.simplesorter.refillThreshold": "Refill Threshold",
     "config.simplesorter.refillThreshold.tooltip": "Refill when 64-stack items drop below this count. 16-stack items automatically use half of the threshold.",
 
-    "message.simplesorter.block_container.blocked": "[SimpleSorter] Blocked container: %s",
-    "message.simplesorter.block_container.unblocked": "[SimpleSorter] Unblocked container: %s",
-    "message.simplesorter.block_container.inventory_not_allowed": "[SimpleSorter] Player inventory cannot be blocked"
+    "message.simplesorter.block_container.blocked": "[SimpleSorterR] Blocked container: %s",
+    "message.simplesorter.block_container.unblocked": "[SimpleSorterR] Unblocked container: %s",
+    "message.simplesorter.block_container.inventory_not_allowed": "[SimpleSorterR] Player inventory cannot be blocked"
 }

@@ -26,7 +26,7 @@ object CreativeTabSorter {
     @JvmStatic
     fun invalidate() {
         sortIndexMap = null
-        logger.info("[SimpleSorter] Creative tab sort index invalidated")
+        logger.info("[SimpleSorterR] Creative tab sort index invalidated")
     }
 
     private fun buildSortIndex(): Map<Item, Int> {
@@ -42,10 +42,10 @@ object CreativeTabSorter {
                 if (optItem.isPresent && !map.containsKey(optItem.get())) {
                     map[optItem.get()] = globalIndex++
                 } else if (!optItem.isPresent) {
-                    logger.warn("[SimpleSorter] Pinned item not found: {}", itemId)
+                    logger.warn("[SimpleSorterR] Pinned item not found: {}", itemId)
                 }
             } catch (e: Exception) {
-                logger.warn("[SimpleSorter] Invalid pinned item ID: {}", itemId)
+                logger.warn("[SimpleSorterR] Invalid pinned item ID: {}", itemId)
             }
         }
 
@@ -61,7 +61,7 @@ object CreativeTabSorter {
                 )
             }
         } catch (e: Exception) {
-            logger.warn("[SimpleSorter] Failed to rebuild creative tab contents: {}", e.message)
+            logger.warn("[SimpleSorterR] Failed to rebuild creative tab contents: {}", e.message)
         }
 
         // Phase 1: Process tabs in configured order
@@ -105,13 +105,13 @@ object CreativeTabSorter {
         }
 
         if (map.isEmpty()) {
-            logger.warn("[SimpleSorter] Creative tabs empty, using registry order as fallback")
+            logger.warn("[SimpleSorterR] Creative tabs empty, using registry order as fallback")
             for (item in Registries.ITEM) {
                 map[item] = globalIndex++
             }
         }
 
-        logger.info("[SimpleSorter] Built creative tab sort index: {} items ({} pinned)", map.size, pinnedItems.size)
+        logger.info("[SimpleSorterR] Built creative tab sort index: {} items ({} pinned)", map.size, pinnedItems.size)
         return map
     }
 }

@@ -1,18 +1,21 @@
 {
-    "key.categories.simplesorter": "SimpleSorter",
-    "key.category.simplesorter.simplesorter": "SimpleSorter",
+    "key.categories.simplesorter": "SimpleSorterR",
+    "key.category.simplesorter.simplesorter": "SimpleSorterR",
     "key.simplesorter.sort": "排序背包",
     "key.simplesorter.config": "打开设置",
     "key.simplesorter.block_container": "屏蔽当前容器",
     "key.simplesorter.lock": "锁定格子",
     "key.simplesorter.batchdrop": "批量丢弃",
+    "key.simplesorter.deposit_matching": "收纳容器已有物品",
 
-    "config.simplesorter.title": "SimpleSorter 排序设置",
+    "config.simplesorter.title": "SimpleSorterR 排序设置",
     "config.simplesorter.category.general": "常规设置",
     "config.simplesorter.category.autoReplace": "自动补充",
 
     "config.simplesorter.requireZ": "需要按住 Z 才能打开设置",
     "config.simplesorter.requireZ.tooltip": "启用后，按设置快捷键时必须同时按住 Z 才会打开菜单。",
+    "config.simplesorter.sortInventoryWhenNoScreen": "无界面时允许按 R 整理主背包",
+    "config.simplesorter.sortInventoryWhenNoScreen.tooltip": "启用后，不打开任何界面时按 R 也会整理玩家主背包，不会整理快捷栏。",
     "config.simplesorter.tabOrder": "分类排序顺序",
     "config.simplesorter.tabOrder.tooltip": "排在前面的分类优先排序。你也可以添加自定义物品组 ID。",
     "config.simplesorter.categoryOrder": "分类排序顺序",
@@ -27,7 +30,7 @@
     "config.simplesorter.refillThreshold": "补货阈值",
     "config.simplesorter.refillThreshold.tooltip": "64 堆叠物品低于这个数量时补货。16 堆叠物品会自动使用一半阈值。",
 
-    "message.simplesorter.block_container.blocked": "[SimpleSorter] 已屏蔽容器：%s",
-    "message.simplesorter.block_container.unblocked": "[SimpleSorter] 已取消屏蔽容器：%s",
-    "message.simplesorter.block_container.inventory_not_allowed": "[SimpleSorter] 玩家背包不能加入黑名单"
+    "message.simplesorter.block_container.blocked": "[SimpleSorterR] 已屏蔽容器：%s",
+    "message.simplesorter.block_container.unblocked": "[SimpleSorterR] 已取消屏蔽容器：%s",
+    "message.simplesorter.block_container.inventory_not_allowed": "[SimpleSorterR] 玩家背包不能加入黑名单"
 }

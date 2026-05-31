@@ -2,6 +2,7 @@ package simplesorter.mc
 
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.screen.slot.Slot
+import simplesorter.mc.tweak.DepositMatchingDoubleClickTweak
 import simplesorter.mc.tweak.LmbShiftDragTweak
 import simplesorter.mc.tweak.LmbShiftDoubleClickTweak
 import simplesorter.mc.tweak.LmbSpaceDoubleClickTweak
@@ -19,6 +20,7 @@ object MouseTweaksHandler {
     private val tweaks: List<MouseTweakModule> = listOf(
         LmbShiftDragTweak(),
         LmbShiftDoubleClickTweak(),
+        DepositMatchingDoubleClickTweak(),
         LmbSpaceDoubleClickTweak(),
         QDoubleClickDropTweak(),
         AltClickLockTweak()

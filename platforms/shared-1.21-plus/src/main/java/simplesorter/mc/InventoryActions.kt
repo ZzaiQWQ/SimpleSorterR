@@ -62,7 +62,7 @@ object InventoryActions {
         }
         
         if (count > 0) {
-            logger.info("[SimpleSorter] Executed $count clicks instantly.")
+            logger.info("[SimpleSorterR] Executed $count clicks instantly.")
         }
     }
 }

@@ -26,7 +26,7 @@ object InventoryScanner {
         simplesorter.mc.config.SimpleSorterConfig.reloadIfChanged()
         sorting = true
         sortPassesRemaining = MAX_PASSES
-        logger.info("[SimpleSorter] Sort requested!")
+        logger.info("[SimpleSorterR] Sort requested!")
     }
 
     /**
@@ -46,8 +46,14 @@ object InventoryScanner {
             return
         }
 
-        // Only sort when a HandledScreen (inventory/container GUI) is open
-        if (client.currentScreen == null || client.currentScreen !is HandledScreen<*>) {
+        val currentScreen = client.currentScreen
+        if (currentScreen == null) {
+            // 只允许在无界面时整理玩家主背包。
+            if (handler !is PlayerScreenHandler || !simplesorter.mc.config.SimpleSorterConfig.sortInventoryWhenNoScreen) {
+                sorting = false
+                return
+            }
+        } else if (currentScreen !is HandledScreen<*>) {
             sorting = false
             return
         }
@@ -116,13 +122,13 @@ object InventoryScanner {
             InventoryActions.executeAllClicks()
             sortPassesRemaining--
             if (sortPassesRemaining <= 0) {
-                logger.info("[SimpleSorter] Max passes reached, stopping.")
+                logger.info("[SimpleSorterR] Max passes reached, stopping.")
                 sorting = false
             }
             // Otherwise: next tick will do another pass
         } else {
             // 0 clicks = fully sorted!
-            logger.info("[SimpleSorter] Fully sorted!")
+            logger.info("[SimpleSorterR] Fully sorted!")
             sorting = false
         }
     }

@@ -14,6 +14,7 @@ object SimpleSorterKeybindings {
     lateinit var blockContainerKey: KeyBinding
     lateinit var lockKey: KeyBinding
     lateinit var batchDropKey: KeyBinding
+    lateinit var depositMatchingKey: KeyBinding
 
     fun register() {
         sortKey = KeyBindingHelper.registerKeyBinding(
@@ -61,7 +62,17 @@ object SimpleSorterKeybindings {
             )
         )
 
+        depositMatchingKey = KeyBindingHelper.registerKeyBinding(
+            KeyBinding(
+                "key.simplesorter.deposit_matching",
+                InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_V,
+                CATEGORY
+            )
+        )
+
         simplesorter.mc.KeyBindingHolder.lockKey = lockKey
         simplesorter.mc.KeyBindingHolder.batchDropKey = batchDropKey
+        simplesorter.mc.KeyBindingHolder.depositMatchingKey = depositMatchingKey
     }
 }

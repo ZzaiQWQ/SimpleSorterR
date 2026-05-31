@@ -1,6 +1,6 @@
-![SimpleSorter Banner](assets/banner.png)
+![SimpleSorterR Banner](assets/banner.png)
 
-# SimpleSorter
+# SimpleSorterR
 
 > A lightweight client-side Fabric inventory sorting mod.
 
@@ -17,6 +17,7 @@ Open an inventory or container and press **R** to sort items.
 - **Custom Sort Order** — Adjust `tabOrder` in the config file to change tab priority
 - **Pinned Items** — Configure `pinnedItems` to keep specific items always sorted first
 - **Dynamic Container Blacklist** — All storage containers are sortable by default (including modded containers like Reinforced Chests). Functional containers are excluded by exact class names in `blockedContainers`; you can also press **B** while a container is open to toggle it automatically
+- **No-Screen Main Inventory Sorting** — Enable `sortInventoryWhenNoScreen` to sort the player main inventory with **R** while no screen is open
 - **Config Hot-Reload** — Edit `simplesorter.json` directly, changes take effect on the next R-key sort without restarting the game
 - **Pure Client-Side** — Sorting is performed by simulated clicks, so the server does not need the mod
 
@@ -41,6 +42,17 @@ While **holding an item** on your cursor, **Shift + Double-Click** on a matching
 Hold **Space** and **Double-Click** any slot in a container to instantly quick-move **every single item** from that inventory to the opposite side.
 
 > Useful for quickly emptying a chest.
+
+#### V + Double-Click to Deposit Matching Items
+
+Hold **V** and **Double-Click** any filled slot in a container to quick-move matching items from the player main inventory into the container, but only when that item already exists in the container.
+
+- Does not move hotbar slots
+- Does not move locked slots
+- Does not move items that are not already present in the container
+- Does not trigger while an item is held on the cursor
+
+> Useful for topping up a sorted chest from your main inventory.
 
 ---
 
@@ -89,6 +101,7 @@ Press **Z + I** (default combo) to open a graphical settings panel in-game:
 - **Pinned Items (pinnedItems)** — Specify item IDs that always sort to the front
 - **Container Blacklist (blockedContainers)** — Add container class names to exclude from sorting, or press **B** while a container is open to write the current class name automatically
 - **Lock Overlay Color (lockOverlayColor)** — Customize locked-slot overlay color, for example `#80FF0000`
+- **No-Screen Sort (sortInventoryWhenNoScreen)** — Allow **R** to sort the player main inventory while no screen is open
 - **Z-Key Guard Toggle** — Disable the Z-key requirement to open settings with just I
 - **Auto Replacer Toggle** — Enable/disable automatic tool and item replacement
 - **Localized UI** — Settings interface automatically adapts to your game language (English / Chinese)
@@ -125,11 +138,11 @@ Also accessible from **Mod Menu** if installed.
 
 ## Keybind Reference
 
-All keybinds appear under the **SimpleSorter** category in Minecraft’s Controls screen and can be changed there.
+All keybinds appear under the **SimpleSorterR** category in Minecraft’s Controls screen and can be changed there.
 
 | Key | Action | Context |
 |:---:|---|---|
-| **R** | Sort & organize inventory | While any container is open |
+| **R** | Sort & organize inventory | While a container is open; can also sort the main inventory with no screen if enabled |
 | **Alt + Click** | Lock / Unlock slot | Prevents that slot from being sorted |
 | **Alt + Left-Drag** | Batch lock / unlock slots | Drag across multiple slots |
 | **B** | Toggle current container blacklist | When the current container should not be sorted |
@@ -137,6 +150,7 @@ All keybinds appear under the **SimpleSorter** category in Minecraft’s Control
 | **Shift + Drag** | Quick-move multiple slots | Drag across slots while holding Shift |
 | **Shift + Double-Click** | Move all identical items | While holding an item on cursor |
 | **Space + Double-Click** | Move all items from container | Empty an entire inventory at once |
+| **V + Double-Click** | Deposit matching items | Move only items already present in the container from main inventory |
 | **Z + I** | Open settings screen | Available anytime |
 
 ---
@@ -154,6 +168,6 @@ All keybinds appear under the **SimpleSorter** category in Minecraft’s Control
 ---
 
 <p align="center">
-  <b>SimpleSorter</b><br>
+  <b>SimpleSorterR</b><br>
   <i>A simple Minecraft inventory sorting tool.</i>
 </p>
